@@ -8,7 +8,7 @@
 
   # To activate virtualenv and set up flask
   1.  mkvirtualenv my-venv
-  2.  workon my-venv
+  ###2.  workon my-venv
   3.  pip install Flask
   4.  pip freeze
   5. # To put all dependencies in a file
