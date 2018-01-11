@@ -17,8 +17,6 @@ def check_admin():
 
 
 # Department Views
-
-
 @admin.route('/departments', methods=['GET', 'POST'])
 @login_required
 def list_departments():
@@ -119,8 +117,6 @@ def delete_department(id):
 
 
 # Role Views
-
-
 @admin.route('/roles')
 @login_required
 def list_roles():
@@ -129,8 +125,8 @@ def list_roles():
     List all roles
     """
     roles = Role.query.all()
-    return render_template(
-        'admin/roles/roles.html', roles=roles, title='Roles')
+    return render_template('admin/roles/roles.html',
+                           roles=roles, title='Roles')
 
 
 @admin.route('/roles/add', methods=['GET', 'POST'])
@@ -160,12 +156,8 @@ def add_role():
         return redirect(url_for('admin.list_roles'))
 
     # load role template
-    return render_template(
-        'admin/roles/role.html',
-        add_role=add_role,
-        form=form,
-        title='Add Role')
-
+    return render_template('admin/roles/role.html', add_role=add_role,
+                           form=form, title='Add Role')
 
 @admin.route('/roles/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -191,11 +183,8 @@ def edit_role(id):
 
     form.description.data = role.description
     form.name.data = role.name
-    return render_template(
-        'admin/roles/role.html',
-        add_role=add_role,
-        form=form,
-        title="Edit Role")
+    return render_template('admin/roles/role.html', add_role=add_role,
+                           form=form, title="Edit Role")
 
 @admin.route('/roles/delete/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -216,8 +205,6 @@ def delete_role(id):
     return render_template(title="Delete Role")
 
 # Employee Views
-
-
 @admin.route('/employees')
 @login_required
 def list_employees():
@@ -255,8 +242,6 @@ def assign_employee(id):
         # redirect to the roles page
         return redirect(url_for('admin.list_employees'))
 
-    return render_template(
-        'admin/employees/employee.html',
-        employee=employee,
-        form=form,
-        title='Assign Employee')
+    return render_template('admin/employees/employee.html',
+                            employee=employee, form=form,
+                            title='Assign Employee')
