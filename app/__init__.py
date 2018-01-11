@@ -1,6 +1,7 @@
 # app/__init__.py
 
 # third-party imports
+import os
 from flask import abort, Flask, render_template
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
@@ -15,9 +16,15 @@ login_manager = LoginManager()
 
 
 def create_app(config_name):
-    app = Flask(__name__, instance_relative_config=True)
-    app.config.from_object(app_config[config_name])
-    app.config.from_pyfile('config.py')
+    if os.getenv('FLASK_CONFIG') == "production":
+        app = Flask(__name__)
+        app.config.update(
+            SECRET_KEY=os.getenv('SECRET_KEY'),
+            SQLALCHEMY_DATABASE_URI=os.getenv('SQLALCHEMY_DATABASE_URI'))
+    else: 
+        app = Flask(__name__, instance_relative_config=True)
+        app.config.from_object(app_config[config_name])
+        app.config.from_pyfile('config.py')
 
     Bootstrap(app)
     db.init_app(app)
@@ -36,7 +43,7 @@ def create_app(config_name):
 
     from .home import home as home_blueprint
     app.register_blueprint(home_blueprint)
-    
+
     @app.errorhandler(403)
     def forbidden(error):
         return render_template('errors/403.html', title='Forbidden'), 403
@@ -48,5 +55,5 @@ def create_app(config_name):
     @app.errorhandler(500)
     def internal_server_error(error):
         return render_template('errors/500.html', title='Server Error'), 500
-   
+
     return app
